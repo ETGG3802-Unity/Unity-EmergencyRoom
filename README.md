@@ -14,7 +14,7 @@
 
 **Current Tasks**
 
-1. Matt D.
+1. Matt D., Colin
 2. Thomas, Don
   1. Thomas - Dynamic First Person Camera
   2. Don - Two arms that grasp/open hands.
