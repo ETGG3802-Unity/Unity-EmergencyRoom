@@ -16,10 +16,10 @@
 
 1. Matt D.
 2. Thomas, Don
-  a. Thomas - Dynamic First Person Camera
-  b. Don - Two arms that grasp/open hands.
-  c. Don/Thomas - Hit detection for planes on objects.
-  d. Thomas - Key Mapping
+  1. Thomas - Dynamic First Person Camera
+  2. Don - Two arms that grasp/open hands.
+  3. Don/Thomas - Hit detection for planes on objects.
+  4. Thomas - Key Mapping
 3. Richard
 4. Jimmy, Daniel
 5. Tom, Maurice
