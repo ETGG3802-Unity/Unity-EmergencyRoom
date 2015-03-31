@@ -12,7 +12,7 @@
 * Find your way through the hospital before time runs out for your patient.
 
 
-Current Tasks
+**Current Tasks**
 
 1. Matt D.
 2. Thomas, Don
