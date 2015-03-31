@@ -13,6 +13,7 @@ Basic Premise
 
 
 Current Tasks
+
 1. Matt D.
 2. Thomas, Don
 3. Richard
