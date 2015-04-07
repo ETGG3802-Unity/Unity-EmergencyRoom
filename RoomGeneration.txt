@@ -1,0 +1,31 @@
+4 - 17 - 15
+
+Stephanie and I (Joseph) were talking about the room generation today. Here are some of the things we decided:
+	1) We are going to start from a lobby in the middle of a 5x5 grid. So, two spaces in both directions outward from this. We may decide on a larger grid later, upon more discussion.
+	2) From a lobby, we can only generate a hallway. The type of hallway (L shaped, T shaped, Cross, Straight) will be determined at this point.
+	3) From a hallway, we can generate either another hallway or a lobby.
+	4) We will end at a lobby (?).
+	5) We think it would be best to just generate a full "maze"; it will be almost the same amount of work and will cut out some problems later.
+		a) This means we are going to generate a full path from the first direction we randomly choose, then recursively go back and generate more paths from lobbies beforehand.
+	6) There does not need to be a space between generated nodes; this means the entire grid may be filled, but it does not mean it will be fully connected.
+	7) Since the quickest way to mathematically end a single path is in 6 steps (see ASCII grid below), make either the 3rd, 5th, or 6th room generated from the first direction be the end point.
+		a) Two lobbies cannot be next to each other, so in most cases, the 6th room will be forced into being a lobby, but if either the 3rd or the 5th is a lobby, prefer 5th to be end point.
+		b) Alternatively, we can always assure that the end point is in a corner and make sure one of the paths connects to it as it goes next to it.
+			i) This will probably happen automatically with this kind of generation scheme. We'll just need to make sure the hallway has a door connecting to the end point.
+		
+
+	Poorly done ASCII grid:
+	
+	•  •  •  5  6
+	•  •  •  4  3
+	•  •  S  1  2
+	•  •  •  •  •
+	•  •  •  •  •
+	
+	1 MUST be a hallway, since S is a lobby.
+	2 can be either a hallway or a lobby.
+	If 2 is a hallway, 3 could be a lobby; This guarantees the nodes at 4 and 6 are hallways. This is the WORST ending point in this situation.
+	4 doesn't matter.
+	If 4 is a hallway, 5 could be a lobby. This guarantees 6 is a hallway. This is the SECOND best ending point in this situation.
+	6 could be a lobby only if 3 and 5 are not. This is the MOST preferred ending point in this situation.
+		Attempt to force 6 to be a lobby, as this is the optimum ending point most of the time.
