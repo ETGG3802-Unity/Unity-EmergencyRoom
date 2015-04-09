@@ -28,6 +28,8 @@ class MazeBuilder:
 		self.width = width
 		self.height = height
 		self.maze = [[Tile.WALL for i in range(width)] for i in range(height)]
+		self.tileImgs = []
+		self.screen = None
 
 	def isLegal(self, x, y):
 		if x >= self.width or y >= self.height:
@@ -60,6 +62,29 @@ class MazeBuilder:
 
 		return cn, rn
 
+	def removeTiles(self, ndir):
+		tiles = [Tile.LOBBY, Tile.CNE, Tile.CNW, Tile.CSE, Tile.CSW, Tile.HNS, Tile.HEW]
+
+		if ndir == Dir.N:
+			tiles.remove(Tile.CNE)
+			tiles.remove(Tile.CNW)
+			tiles.remove(Tile.HEW)
+		elif ndir == Dir.S:
+			tiles.remove(Tile.CSE)
+			tiles.remove(Tile.CSW)
+			tiles.remove(Tile.HEW)
+		elif ndir == Dir.E:
+			tiles.remove(Tile.CNE)
+			tiles.remove(Tile.CSE)
+			tiles.remove(Tile.HNS)
+		elif ndir == Dir.W:
+			tiles.remove(Tile.CNW)
+			tiles.remove(Tile.CSW)
+			tiles.remove(Tile.HNS)
+
+		return tiles
+
+
 	def buildMaze(self, x, y, tile, ldir):
 
 		c = x
@@ -69,36 +94,21 @@ class MazeBuilder:
 
 		self.maze[c][r] = tile
 
-		#tiles that can be used next
-		tiles = [Tile.LOBBY, Tile.CNE, Tile.CNW, Tile.CSE, Tile.CSW, Tile.HNS, Tile.HEW]
-
-		if ldir == Dir.N:
-			tiles.remove(Tile.CNE)
-			tiles.remove(Tile.CNW)
-			tiles.remove(Tile.HEW)
-		elif ldir == Dir.S:
-			tiles.remove(Tile.CSE)
-			tiles.remove(Tile.CSW)
-			tiles.remove(Tile.HEW)
-		elif ldir == Dir.E:
-			tiles.remove(Tile.CNE)
-			tiles.remove(Tile.CSE)
-			tiles.remove(Tile.HNS)
-		elif ldir == Dir.W:
-			tiles.remove(Tile.CNW)
-			tiles.remove(Tile.CSW)
-			tiles.remove(Tile.HNS)
+		if self.stepDisplay(c, r, tile):
+			return True
 
 		#print(tile)
 
 		if tile == Tile.LOBBY:
-			tiles.remove(Tile.LOBBY)
-
+			
 			dirs = [Dir.N, Dir.S, Dir.E, Dir.W]
 			random.shuffle(dirs)
 			for d in dirs:
 				cn, rn = self.getNext(c, r, d)
 				if self.isLegal(cn, rn):
+					print(d)
+					tiles = self.removeTiles(d)
+					tiles.remove(Tile.LOBBY)
 					self.buildMaze(cn, rn, random.choice(tiles), d)
 
 			return
@@ -131,53 +141,77 @@ class MazeBuilder:
 
 		elif tile == Tile.HNS or tile == Tile.HEW:
 			ndir = ldir
+
+		tiles = self.removeTiles(ndir)
 			
 		cn, rn = self.getNext(c, r, ndir)
 		if self.isLegal(cn, rn):
+			print(ndir)
 			self.buildMaze(cn, rn, random.choice(tiles), ndir)
 
 		return
 
-	def displayMaze(self):
-		tileImgs = []
+	def initDisplay(self):
+		self.tileImgs = []
 
 		imgDir = "./MazeImages"
 
 		for s, d, files in os.walk(imgDir):
 			for f in files:
-				tileImgs.append(pygame.image.load(os.path.join(imgDir, f)))
+				self.tileImgs.append(pygame.image.load(os.path.join(imgDir, f)))
 
 
-		screen = pygame.display.set_mode((800,600))
+		self.screen = pygame.display.set_mode((400,400))
+
+	def stepDisplay(self, x, y, tile):
+		xc = x * 20
+		yc = y * 20
+
+		while(True):
+			evt = pygame.event.wait()
+			if pygame.key.get_pressed()[pygame.K_SPACE]:
+				break
+			if evt.type == pygame.QUIT:
+				pygame.display.quit()
+				return True
+
+
+		self.screen.blit(self.tileImgs[int(tile)], (xc, yc))
+		pygame.display.flip()
+
+
+	def displayMaze(self):
 
 		x = 0
 		y = 0
 
 		for i in maze.maze:
 			for j in i:
-				screen.blit(tileImgs[int(j)], (x, y))
-				pygame.display.flip()
+				self.screen.blit(self.tileImgs[int(j)], (x, y))
 				x += 20
 				
 			#print(i)
 			y += 20
 			x = 0
 			
+		pygame.display.flip()
 
-		
-
-		done = False
-		while(not done):
-			evt = pygame.event.wait()
-			if evt.type == pygame.QUIT:
-				done = True
 w = 20
 h = 20
 
 maze = MazeBuilder(w,h)
 
+maze.initDisplay()
+
 maze.buildMaze(10, 10, Tile.LOBBY, Dir.W)
 
-maze.displayMaze()
+#maze.displayMaze()
+
+done = False
+while(not done):
+	evt = pygame.event.wait()
+	if evt.type == pygame.QUIT:
+		pygame.display.quit()
+		done = True
 
 #x = 1.436, y = 1.375, z = .934
