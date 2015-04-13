@@ -37,6 +37,7 @@ class MazeBuilder:
 		maxDensity = .60
 		self.minTiles = minDensity * area
 		self.maxTiles = maxDensity * area
+		self.lobbies = []
 
 
 	def isLegal(self, x, y):
