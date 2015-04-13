@@ -30,6 +30,14 @@ class MazeBuilder:
 		self.maze = [[Tile.WALL for i in range(width)] for i in range(height)]
 		self.tileImgs = []
 		self.screen = None
+		self.numTiles = 0
+
+		area = width * height
+		minDensity = .25 #based on tests to find best maze
+		maxDensity = .60
+		self.minTiles = minDensity * area
+		self.maxTiles = maxDensity * area
+
 
 	def isLegal(self, x, y):
 		if x >= self.width or y >= self.height:
@@ -62,7 +70,7 @@ class MazeBuilder:
 
 		return cn, rn
 
-	def removeTiles(self, ndir):
+	def getTiles(self, ndir):
 		tiles = [Tile.LOBBY, Tile.CNE, Tile.CNW, Tile.CSE, Tile.CSW, Tile.HNS, Tile.HEW]
 
 		if ndir == Dir.N:
@@ -93,9 +101,10 @@ class MazeBuilder:
 		rn = -1
 
 		self.maze[c][r] = tile
+		self.numTiles += 1
 
-		if self.stepDisplay(c, r, tile):
-			return True
+		# if self.stepDisplay(c, r, tile):
+		# 	return True
 
 		#print(tile)
 
@@ -106,8 +115,7 @@ class MazeBuilder:
 			for d in dirs:
 				cn, rn = self.getNext(c, r, d)
 				if self.isLegal(cn, rn):
-					print(d)
-					tiles = self.removeTiles(d)
+					tiles = self.getTiles(d)
 					tiles.remove(Tile.LOBBY)
 					self.buildMaze(cn, rn, random.choice(tiles), d)
 
@@ -142,11 +150,10 @@ class MazeBuilder:
 		elif tile == Tile.HNS or tile == Tile.HEW:
 			ndir = ldir
 
-		tiles = self.removeTiles(ndir)
+		tiles = self.getTiles(ndir)
 			
 		cn, rn = self.getNext(c, r, ndir)
 		if self.isLegal(cn, rn):
-			print(ndir)
 			self.buildMaze(cn, rn, random.choice(tiles), ndir)
 
 		return
@@ -180,6 +187,17 @@ class MazeBuilder:
 		pygame.display.flip()
 
 
+	def checkMaze(self):
+		print(self.numTiles)
+
+		if self.numTiles < self.minTiles or self.numTiles > self.maxTiles:
+			self.numTiles = 0
+			self.maze = [[Tile.WALL for i in range(self.width)] for i in range(self.height)]
+			self.buildMaze(10, 10, Tile.LOBBY, Dir.W)
+			return False
+
+		return True
+
 	def displayMaze(self):
 
 		x = 0
@@ -188,11 +206,11 @@ class MazeBuilder:
 		for i in maze.maze:
 			for j in i:
 				self.screen.blit(self.tileImgs[int(j)], (x, y))
-				x += 20
+				y += 20
 				
 			#print(i)
-			y += 20
-			x = 0
+			x += 20
+			y = 0
 			
 		pygame.display.flip()
 
@@ -205,7 +223,10 @@ maze.initDisplay()
 
 maze.buildMaze(10, 10, Tile.LOBBY, Dir.W)
 
-#maze.displayMaze()
+while not maze.checkMaze():
+	continue
+
+maze.displayMaze()
 
 done = False
 while(not done):
