@@ -21,7 +21,6 @@ public class Main_Input : MonoBehaviour {
 	}
 
 	void FixedUpdate(){
-		moving = false;
 
 		// Cap player speed! I hate making new Vector3's during the physics loop, though...//
 		if (charRigidBody.velocity.z >= maxVelocity)
@@ -31,19 +30,11 @@ public class Main_Input : MonoBehaviour {
 		}
 		///////////////////////
 		/// 
-		/// Movement Code! //
-		if (Input.GetKey(forward)) {
-			charRigidBody.AddForce(transform.forward * 0.6f, ForceMode.VelocityChange);
-			moving = true;
-		}
-		if (Input.GetKey (backward)) {
-			charRigidBody.AddForce(-transform.forward * 0.6f, ForceMode.VelocityChange);
-			moving = true;
-		}
-		if (!moving) {
-			charRigidBody.velocity = Vector3.zero; //stop all movement.
-		}
-		/////////////////////////
+	}
+
+	void onCollisionEnter(Collision col)
+	{
+		charRigidBody.freezeRotation = true; // don't spin out when hit!!!
 	}
 	
 	// Update is called once per frame
@@ -57,6 +48,7 @@ public class Main_Input : MonoBehaviour {
 		// it works completely depends on outside influences (state of machine, data corruption, etc.)
 		Cursor.lockState = CursorLockMode.Locked;
 		Cursor.visible = false;
+		moving = false;
 		//////////////////////////////////////////////////////////////////////////////////////////////////////
 
 		maxPitch = 60.0f; // to cap vertical rotation, to be implemented later!
@@ -76,6 +68,20 @@ public class Main_Input : MonoBehaviour {
 			transform.RotateAround (transform.position, Vector3.up, Input.GetAxis("Mouse X"));
 			//head.transform.RotateAround (head.transform.position, head.transform.up, (pz.x - 0.5f) * deltaRotation);
 		}
+
+		/// Movement Code! //
+		if (Input.GetKey(forward)) {
+			charRigidBody.AddForce(transform.forward * 0.6f, ForceMode.VelocityChange);
+			moving = true;
+		}
+		if (Input.GetKey (backward)) {
+			charRigidBody.AddForce(-transform.forward * 0.6f, ForceMode.VelocityChange);
+			moving = true;
+		}
+		if (!moving) {
+			charRigidBody.velocity = Vector3.zero; //stop all movement.
+		}
+		/////////////////////////
 	}
 
 }
