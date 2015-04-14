@@ -27,9 +27,10 @@ public class MazeBuilder : MonoBehaviour
 		NONE
 	}
 
-public
-	int width;
-	int height;
+	public int width;
+	public int height;
+	public float minDensity;
+	public float maxDensity;
 	List<List<Tile>> maze;
 	List<Transform> tileList;
 	int numTiles;
@@ -39,14 +40,14 @@ public
 
 	Random rand;
 
-	Transform WALL;
-	Transform LOBBY;
-	Transform CNE;
-	Transform CNW;
-	Transform CSE;
-	Transform CSW;
-	Transform HNS; //hall running from north to south
-	Transform HEW;
+	public Transform WALL;
+	public Transform LOBBY;
+	public Transform CNE;
+	public Transform CNW;
+	public Transform CSE;
+	public Transform CSW;
+	public Transform HNS; //hall running from north to south
+	public Transform HEW;
 
 	public bool isLegal(int x, int y)
 	{
@@ -199,7 +200,7 @@ public
 		float tileWidth = 5F;
 		float tileHeight = 5F;
        	float x = 0;
-        float y = 0;
+        float z = 0;
         Tile tile;
 
 		for (int i = 0; i < width; i++) {
@@ -208,17 +209,19 @@ public
 				tile = maze[i][j];
 				Transform pref = tileList[(int)tile];
 				x = i * tileWidth;
-				y = i * tileHeight;
-				Instantiate(pref, new Vector3(x, y, 0), Quaternion.identity);
+				z = j * tileHeight;
+				Instantiate(pref, new Vector3(x, 0, z), Quaternion.identity);
 			}
 		}
 	}
 	// Use this for initialization
 	void Start () {
+		/*
 		width = 20;
 		height = 20;
-		float minDensity = .25F; //Defines the minimum number of tiles based on the size of the maze
-		float maxDensity = .60F;
+		minDensity = .25F; //Defines the minimum number of tiles based on the size of the maze
+		maxDensity = .60F;
+		*/
 		
 		maze = new List<List<Tile>>();
 		
