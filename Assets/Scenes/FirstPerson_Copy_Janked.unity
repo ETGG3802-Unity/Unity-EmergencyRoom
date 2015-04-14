@@ -613,7 +613,7 @@ GameObject:
   - 4: {fileID: 1379529791}
   - 54: {fileID: 1379529794}
   - 114: {fileID: 1379529793}
-  - 65: {fileID: 1379529792}
+  - 136: {fileID: 1379529792}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -635,8 +635,8 @@ Transform:
   - {fileID: 1991138242}
   m_Father: {fileID: 0}
   m_RootOrder: 3
---- !u!65 &1379529792
-BoxCollider:
+--- !u!136 &1379529792
+CapsuleCollider:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
@@ -644,8 +644,9 @@ BoxCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 2, z: 1}
+  m_Radius: .5
+  m_Height: 2
+  m_Direction: 1
   m_Center: {x: 0, y: -1, z: 0}
 --- !u!114 &1379529793
 MonoBehaviour:
@@ -659,8 +660,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   forward: 119
-  left: 97
-  right: 100
   backward: 115
   pz: {x: 0, y: 0, z: 0}
   maxVelocity: 10
