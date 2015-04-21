@@ -9,7 +9,7 @@ import os
 ###########
 
 # Min and max percent densities of the maze. Based on tests, can be adjusted later very easily.
-minDensity = 0.70
+minDensity = 0.2
 maxDensity = 1.00
 
 # Width and height of the overall grid the maze CAN occupy.
@@ -156,6 +156,7 @@ class MazeBuilder:
 					tiles = self.getTiles(d)
 					tiles.remove(Tile.LOBBY)
 					self.buildMaze(cn, rn, random.choice(tiles), d)
+					break
 
 			return
 			
@@ -175,6 +176,7 @@ class MazeBuilder:
 				if self.isLegal(cn, rn):
 					tiles = self.getTiles(d)
 					self.buildMaze(cn, rn, random.choice(tiles), d)
+					break
 		
 		elif tile == Tile.TWNE:
 			dirs = [Dir.W, Dir.N, Dir.E]
@@ -192,6 +194,7 @@ class MazeBuilder:
 				if self.isLegal(cn, rn):
 					tiles = self.getTiles(d)
 					self.buildMaze(cn, rn, random.choice(tiles), d)
+					break
 					
 		elif tile == Tile.TNES:
 			dirs = [Dir.N, Dir.E, Dir.S]
@@ -209,6 +212,7 @@ class MazeBuilder:
 				if self.isLegal(cn, rn):
 					tiles = self.getTiles(d)
 					self.buildMaze(cn, rn, random.choice(tiles), d)
+					break
 					
 		elif tile == Tile.TNWS:
 			dirs = [Dir.N, Dir.W, Dir.S]
@@ -226,6 +230,7 @@ class MazeBuilder:
 				if self.isLegal(cn, rn):
 					tiles = self.getTiles(d)
 					self.buildMaze(cn, rn, random.choice(tiles), d)
+					break
 		
 		elif tile == Tile.CNE:
 			if ldir == Dir.S:

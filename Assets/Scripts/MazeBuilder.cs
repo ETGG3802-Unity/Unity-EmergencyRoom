@@ -40,6 +40,7 @@ public class MazeBuilder : MonoBehaviour
 
 	Random rand;
 
+	public Transform NONE; //for debug purposes only
 	public Transform WALL;
 	public Transform LOBBY;
 	public Transform CNE;
@@ -48,7 +49,7 @@ public class MazeBuilder : MonoBehaviour
 	public Transform CSW;
 	public Transform HNS; //hall running from north to south
 	public Transform HEW;
-
+	
 	public bool isLegal(int x, int y)
 	{
 		if (x >= width || y >= height)
@@ -131,6 +132,7 @@ public class MazeBuilder : MonoBehaviour
 		int r = y;
 		List<int> next = new List<int> {-1,-1};
 		List<Tile> tiles;
+		Tile tnext = Tile.LOBBY;
 
 		maze[c][r] = tile;
 		numTiles += 1;
@@ -146,7 +148,9 @@ public class MazeBuilder : MonoBehaviour
 				{
 					tiles = getTiles(d);
 					tiles.Remove(Tile.LOBBY);
-					buildMaze(next[0], next[1], tiles[Random.Range(0,tiles.Count)], d);
+					tnext = tiles[Random.Range(0,tiles.Count)];
+					print(tnext + ", " + d + ", (" + next[0] + "," + next[1] + ")\n"); 
+					buildMaze(next[0], next[1], tnext , d);
 				}
 			}
 
@@ -190,7 +194,11 @@ public class MazeBuilder : MonoBehaviour
 			
 		next = getNext(c, r, ndir);
 		if (isLegal(next[0], next[1]))
-			buildMaze(next[0], next[1], tiles[Random.Range(0, tiles.Count)], ndir);
+		{
+			tnext = tiles[Random.Range(0, tiles.Count)];
+			print(tnext + ", " + ndir + ", (" + next[0] + "," + next[1] + ")\n");
+			buildMaze(next[0], next[1], tnext, ndir);
+		}
 
 		return;
 	}
@@ -209,7 +217,7 @@ public class MazeBuilder : MonoBehaviour
 				tile = maze[i][j];
 				Transform pref = tileList[(int)tile];
 				x = i * tileWidth;
-				z = j * tileHeight;
+				z = j * -tileHeight; //Required for the way Unity reads coordinates
 				Instantiate(pref, new Vector3(x, 0, z), Quaternion.identity);
 			}
 		}
