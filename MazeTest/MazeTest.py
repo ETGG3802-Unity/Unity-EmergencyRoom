@@ -3,18 +3,26 @@ from enum import Enum
 import random
 import pygame
 import os
+import sys
 
 ###########
 # DEFINES #
 ###########
 
+# Determine whether or not you want there to be branches in the maze.
+branching = True
+
 # Min and max percent densities of the maze. Based on tests, can be adjusted later very easily.
-minDensity = 0.2
-maxDensity = 1.00
+if not branching:
+	minDensity = 0.10
+	maxDensity = 0.60
+if branching:
+	minDensity = 0.50
+	maxDensity = 0.90
 
 # Width and height of the overall grid the maze CAN occupy.
-width = 15
-height = 15
+width = 20
+height = 20
 
 # Starting position of the first lobby.
 startX = 8
@@ -25,6 +33,29 @@ minDistance = 6
 
 # The number of possible end points. This is if we decide one end point is too cruel.
 numEndPoints = 1
+
+for arg in sys.argv:
+	if arg.startswith("branching="):
+		if arg.endswith("true") or arg.endswith("True"):
+			branching = True
+		elif arg.endswith("false") or arg.endswith("False"):
+			branching = False
+	elif arg.startswith("minDensity="):
+		minDensity = float(arg[11:])
+	elif arg.startswith("maxDensity="):
+		maxDensity = float(arg[11:])
+#	elif arg.startswith("width="):		# For some reason, these commands break it....
+#		width = int(arg[6:])
+#	elif arg.startswith("height="):
+#		height = int(arg[7:])
+	elif arg.startswith("startX="):
+		startX = int(arg[7:])
+	elif arg.startswith("startY="):
+		startY = int(arg[7:])
+	elif arg.startswith("minDistance="):
+		minDistance = int(arg[12:])
+	elif arg.startswith("numEndPoints="):
+		numEndPoints = int(arg[13:])
 
 ###############
 # END DEFINES #
@@ -57,6 +88,7 @@ class Dir(Enum):
 class MazeBuilder:
 
 	def __init__(self):
+		print("Width: " + str(width) + "  Height: " + str(height))
 		self.maze = [[Tile.WALL for i in range(width)] for i in range(height)]
 		self.tileImgs = []
 		self.screen = None
@@ -66,7 +98,6 @@ class MazeBuilder:
 		self.minTiles = minDensity * area
 		self.maxTiles = maxDensity * area
 		self.lobbies = []
-
 
 	def isLegal(self, x, y):
 		if x >= width or y >= height:
@@ -156,81 +187,31 @@ class MazeBuilder:
 					tiles = self.getTiles(d)
 					tiles.remove(Tile.LOBBY)
 					self.buildMaze(cn, rn, random.choice(tiles), d)
-					break
+					if not branching:
+						break
 
 			return
 			
-		if tile == Tile.TWSE:
-			dirs = [Dir.W, Dir.S, Dir.E]
+		if tile == Tile.TWSE or tile == Tile.TWNE or tile == Tile.TNES or tile == Tile.TNWS:
+			dirs = [Dir.N, Dir.W, Dir.S, Dir.E]
 			random.shuffle(dirs)
 			
-			if ldir == Dir.E:
+			if ldir == Dir.E or tile == Tile.TNES:
 				dirs.remove(Dir.W)
-			elif ldir == Dir.N:
+			if ldir == Dir.N or tile == Tile.TWNE:
 				dirs.remove(Dir.S)
-			elif ldir == Dir.W:
+			if ldir == Dir.W or tile == Tile.TNWS:
 				dirs.remove(Dir.E)
-				
-			for d in dirs:
-				cn, rn = self.getNext(c, r, d)
-				if self.isLegal(cn, rn):
-					tiles = self.getTiles(d)
-					self.buildMaze(cn, rn, random.choice(tiles), d)
-					break
-		
-		elif tile == Tile.TWNE:
-			dirs = [Dir.W, Dir.N, Dir.E]
-			random.shuffle(dirs)
-			
-			if ldir == Dir.E:
-				dirs.remove(Dir.W)
-			elif ldir == Dir.S:
+			if ldir == Dir.S or tile == Tile.TWSE:
 				dirs.remove(Dir.N)
-			elif ldir == Dir.W:
-				dirs.remove(Dir.E)
 				
 			for d in dirs:
 				cn, rn = self.getNext(c, r, d)
 				if self.isLegal(cn, rn):
 					tiles = self.getTiles(d)
 					self.buildMaze(cn, rn, random.choice(tiles), d)
-					break
-					
-		elif tile == Tile.TNES:
-			dirs = [Dir.N, Dir.E, Dir.S]
-			random.shuffle(dirs)
-			
-			if ldir == Dir.S:
-				dirs.remove(Dir.N)
-			elif ldir == Dir.W:
-				dirs.remove(Dir.E)
-			elif ldir == Dir.N:
-				dirs.remove(Dir.S)
-				
-			for d in dirs:
-				cn, rn = self.getNext(c, r, d)
-				if self.isLegal(cn, rn):
-					tiles = self.getTiles(d)
-					self.buildMaze(cn, rn, random.choice(tiles), d)
-					break
-					
-		elif tile == Tile.TNWS:
-			dirs = [Dir.N, Dir.W, Dir.S]
-			random.shuffle(dirs)
-			
-			if ldir == Dir.S:
-				dirs.remove(Dir.N)
-			elif ldir == Dir.E:
-				dirs.remove(Dir.W)
-			elif ldir == Dir.N:
-				dirs.remove(Dir.S)
-				
-			for d in dirs:
-				cn, rn = self.getNext(c, r, d)
-				if self.isLegal(cn, rn):
-					tiles = self.getTiles(d)
-					self.buildMaze(cn, rn, random.choice(tiles), d)
-					break
+					if not branching:
+						break
 		
 		elif tile == Tile.CNE:
 			if ldir == Dir.S:
