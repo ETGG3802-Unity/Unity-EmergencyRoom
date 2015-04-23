@@ -29,6 +29,8 @@ public class MazeBuilder : MonoBehaviour
 
 	public int width;
 	public int height;
+	public float tWidth;
+	public float tHeight;
 	public float minDensity;
 	public float maxDensity;
 	List<List<Tile>> maze;
@@ -149,7 +151,7 @@ public class MazeBuilder : MonoBehaviour
 					tiles = getTiles(d);
 					tiles.Remove(Tile.LOBBY);
 					tnext = tiles[Random.Range(0,tiles.Count)];
-					print(tnext + ", " + d + ", (" + next[0] + "," + next[1] + ")\n"); 
+					//print(tnext + ", " + d + ", (" + next[0] + "," + next[1] + ")\n"); 
 					buildMaze(next[0], next[1], tnext , d);
 				}
 			}
@@ -196,7 +198,7 @@ public class MazeBuilder : MonoBehaviour
 		if (isLegal(next[0], next[1]))
 		{
 			tnext = tiles[Random.Range(0, tiles.Count)];
-			print(tnext + ", " + ndir + ", (" + next[0] + "," + next[1] + ")\n");
+			//print(tnext + ", " + ndir + ", (" + next[0] + "," + next[1] + ")\n");
 			buildMaze(next[0], next[1], tnext, ndir);
 		}
 
@@ -205,10 +207,12 @@ public class MazeBuilder : MonoBehaviour
 
 	public void createMaze()
 	{
-		float tileWidth = 5F;
-		float tileHeight = 5F;
+		float tileWidth = tWidth;
+		float tileHeight = tHeight;
        	float x = 0;
         float z = 0;
+		float divWidth = (width / 2) * tileWidth;
+		float divHeight = (height / 2) * -tileHeight;
         Tile tile;
 
 		for (int i = 0; i < width; i++) {
@@ -216,8 +220,9 @@ public class MazeBuilder : MonoBehaviour
 			for (int j = 0; j < height; j++) {
 				tile = maze[i][j];
 				Transform pref = tileList[(int)tile];
-				x = i * tileWidth;
-				z = j * -tileHeight; //Required for the way Unity reads coordinates
+				x = ((i * tileWidth) - divWidth);
+				print (x);
+				z = ((j * -tileHeight) - divHeight); //Required for the way Unity reads coordinates
 				Instantiate(pref, new Vector3(x, 0, z), Quaternion.identity);
 			}
 		}
