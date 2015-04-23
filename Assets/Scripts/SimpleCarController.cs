@@ -10,7 +10,7 @@ public class AxleInfo {
 	public bool steering; // does this wheel apply steer angle?
 }
 public class SimpleCarController : MonoBehaviour {
-
+	public float curAngle = 0.0f;
 	public List<AxleInfo> axleInfos; // the information about each individua axle
 	public float maxMotorTorque; // maximum torque the motor can apply to wheel
 	public float maxSteeringAngle; // maximum steer angle the wheel can have
@@ -26,7 +26,22 @@ public class SimpleCarController : MonoBehaviour {
 		}
 		float motor = maxMotorTorque * force;
 
-		float steering = maxSteeringAngle * Input.GetAxis("Horizontal");
+		float angle = 0;
+		if (Input.GetKey (KeyCode.RightArrow)) {
+			angle += .3f;
+			if(angle >=1 ){
+				angle = 1;
+			}
+		}
+		else if(Input.GetKey (KeyCode.LeftArrow)){
+			angle -= .3f;
+			if (angle <= -1){
+				angle = -1;
+			}
+		}
+		float steering = maxSteeringAngle * angle;
+		curAngle = steering;
+
 		foreach (AxleInfo axleInfo in axleInfos) {
 			if (axleInfo.steering) {
 				axleInfo.leftWheel.steerAngle = steering;
@@ -37,5 +52,9 @@ public class SimpleCarController : MonoBehaviour {
 				axleInfo.rightWheel.motorTorque = motor;
 			}
 		}
+	}
+	public float getAngle()
+	{
+		return curAngle;
 	}
 }
