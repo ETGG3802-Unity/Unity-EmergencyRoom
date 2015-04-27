@@ -3,13 +3,27 @@ using System.Collections;
 
 public class RayCast_Grab : MonoBehaviour {
 
-	// Use this for initialization
+	public GameObject head;
+
+	private RaycastHit hit;
+	private float sightDistance = 10.0f;
+
 	void Start () {
 	
 	}
 	
-	// Update is called once per frame
-	void Update () {
-	
+
+	void Update () 
+	{
+		if (Input.GetMouseButton (0)) 
+		{
+			if(Physics.Raycast(head.transform.position, head.transform.forward, out hit, sightDistance))
+			{
+				GameObject other = hit.transform.gameObject;
+				if(other.tag == "Grabbable"){
+					// insert grab logic here.
+				}
+			}
+		}
 	}
 }
