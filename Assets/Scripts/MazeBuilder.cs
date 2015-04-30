@@ -37,6 +37,8 @@ public class MazeBuilder : MonoBehaviour
 	List<Transform> tileList;
 	int numTiles;
 
+	public List<Transform> otherObjects;
+
 	int minTiles;
 	int maxTiles;
 
