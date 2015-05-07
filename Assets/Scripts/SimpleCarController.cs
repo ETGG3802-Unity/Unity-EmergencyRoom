@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityStandardAssets.Characters.FirstPerson;
+using UnityStandardAssets.CrossPlatformInput;
 
 [System.Serializable]
 public class AxleInfo {
@@ -14,6 +16,32 @@ public class SimpleCarController : MonoBehaviour {
 	public List<AxleInfo> axleInfos; // the information about each individua axle
 	public float maxMotorTorque; // maximum torque the motor can apply to wheel
 	public float maxSteeringAngle; // maximum steer angle the wheel can have
+
+	private FirstPersonController fpControl;
+	private SimpleCarController thisController;
+	private Camera fpCam;
+	private Camera carCam;
+
+	void Start(){
+		// References to the First Person Controller script and main camera. //
+		fpControl = GameObject.Find ("FPSController").GetComponent<FirstPersonController>();
+		fpCam = GameObject.Find ("FirstPersonCharacter").GetComponent<Camera>();
+		thisController = this; // change if broken
+		carCam = gameObject.GetComponent("Main Camera").GetComponent<Camera>();
+		// Note that gameObject.enabled will disable this script, and gameObject.GetComponent("Main Camera").GetComponent<Camera>() will
+		// get this thing's camera...
+	}
+
+	public void Update()
+	{
+		if (Input.GetKey (KeyCode.P)) {
+			fpControl.enabled = true;
+			GameObject.Find ("FPSController").transform.position = gameObject.transform.position;
+			fpCam.enabled = true;
+			thisController.enabled = false;
+			carCam.enabled = false;
+		}
+	}
 
 	public void FixedUpdate()
 	{

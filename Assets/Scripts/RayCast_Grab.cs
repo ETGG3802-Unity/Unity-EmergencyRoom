@@ -19,18 +19,18 @@ public class RayCast_Grab : MonoBehaviour {
 
 	void Start () {
 		// References to the First Person Controller script and main camera. //
-		//fpControl = gameObject.GetComponent<FirstPersonController> ();
-		//fpCam = GameObject.Find ("FirstPersonCharacter").GetComponent<Camera>();
+		fpControl = gameObject.GetComponent<FirstPersonController> ();
+		fpCam = GameObject.Find ("FirstPersonCharacter").GetComponent<Camera>();
 		///////////////////////////////////////////////////////////////////////
 		// References to the Car Controller and main camera. //
-		//carControl = GameObject.Find ("Car_root").GetComponent <SimpleCarController>();
+		carControl = GameObject.Find ("Stretcher01").GetComponent <SimpleCarController>();
 		// Note that the below may not work... //
-		//carCam = GameObject.Find ("Car_root").GetComponent("Main Camera");
+		carCam = GameObject.Find ("Stretcher01").GetComponent("Main Camera").GetComponent<Camera>();
 		// You control the character by default... // 
-		/*carControl.enabled = false; // check later for stupidity...
+		carControl.enabled = false; // check later for stupidity...
 		carCam.enabled = false;
 		fpControl.enabled = true;
-		fpCam.enabled = true;*/
+		fpCam.enabled = true;
 		/////////////////////////////////////////////
 		// Eventually, we need to get a specific reference to the RAGDOLL, and set his parts //
 		// to NOT be kinematic whenever we release the mouse button. //
@@ -60,18 +60,20 @@ public class RayCast_Grab : MonoBehaviour {
 					}
 				} else if (other.tag == "CarController" && !hasObject) {
 					// SWITCH CONTROL TO CAR //
-					/*fpControl.enabled = false;
+					fpControl.enabled = false;
 					fpCam.enabled = false;
 					carControl.enabled = true;
-					carCam.enabled = true;*/
+					carCam.enabled = true;
 				} else {
 					print ("Watch your trigger finger, nothing to grab here!");
 				}
 			}
 		} else {
 			hasObject = false;
+			GameObject.Find ("Bip008 Spine").transform.parent = null;
+			GameObject.Find ("Bip008 Spine").GetComponent<Rigidbody>().isKinematic = false;
 			GameObject.Find ("Cube").transform.parent = null;
-			GameObject.Find ("Cube").GetComponent<Rigidbody>().isKinematic = false;
+			GameObject.Find("Cube").GetComponent<Rigidbody>().isKinematic = false;
 		}
 	}
 }
