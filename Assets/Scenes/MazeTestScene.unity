@@ -599,6 +599,33 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: b3aa4be11952bb3468734f368afea795, type: 2}
   m_IsPrefabParent: 0
+--- !u!1 &509962321
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 2105550734}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 509962322}
+  m_Layer: 0
+  m_Name: Missing Prefab
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &509962322
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 2105550734}
+  m_GameObject: {fileID: 509962321}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -.75999999, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
 --- !u!1001 &510517325
 Prefab:
   m_ObjectHideFlags: 0
@@ -1657,9 +1684,10 @@ MonoBehaviour:
   height: 20
   tWidth: 27
   tHeight: 27
-  minDensity: .25
+  minDensity: .100000001
   maxDensity: .600000024
   otherObjects: []
+  TESTMESH: {fileID: 4300000, guid: cf856389f4019e144bd6a12e343c176a, type: 3}
   NONE: {fileID: 1020566233}
   WALL: {fileID: 1020566233}
   LOBBY: {fileID: 1305979630}
@@ -1951,33 +1979,6 @@ Transform:
   - {fileID: 1089861679}
   m_Father: {fileID: 0}
   m_RootOrder: 2
---- !u!1 &1742990229
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 508840058}
-  serializedVersion: 4
-  m_Component:
-  - 4: {fileID: 1742990230}
-  m_Layer: 0
-  m_Name: Missing Prefab
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1742990230
-Transform:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 508840058}
-  m_GameObject: {fileID: 1742990229}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 4
 --- !u!1 &1780181055
 GameObject:
   m_PrefabParentObject: {fileID: 100012, guid: efca1169eb52c4b45a5f9a4535cb62d2, type: 2}

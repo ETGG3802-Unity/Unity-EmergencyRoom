@@ -44,6 +44,7 @@ public class MazeBuilder : MonoBehaviour
 
 	Random rand;
 
+	public Mesh TESTMESH;
 	public Transform NONE; //for debug purposes only
 	public Transform WALL;
 	public Transform LOBBY;
@@ -53,6 +54,8 @@ public class MazeBuilder : MonoBehaviour
 	public Transform CSW;
 	public Transform HNS; //hall running from north to south
 	public Transform HEW;
+
+	List<int> lastTile;
 	
 	public bool isLegal(int x, int y)
 	{
@@ -141,8 +144,11 @@ public class MazeBuilder : MonoBehaviour
 		maze[c][r] = tile;
 		numTiles += 1;
 
+		lastTile[0] = c;
+		lastTile[1] = r;
+
 		if (tile == Tile.LOBBY)
-		{		
+		{	
 			List<Dir> dirs = new List<Dir> {Dir.N, Dir.S, Dir.E, Dir.W};
 			//random.shuffle(dirs)
 			foreach (Dir d in dirs)
@@ -155,6 +161,7 @@ public class MazeBuilder : MonoBehaviour
 					tnext = tiles[Random.Range(0,tiles.Count)];
 					//print(tnext + ", " + d + ", (" + next[0] + "," + next[1] + ")\n"); 
 					buildMaze(next[0], next[1], tnext , d);
+					break;
 				}
 			}
 
@@ -209,8 +216,8 @@ public class MazeBuilder : MonoBehaviour
 
 	public void createMaze()
 	{
-		float tileWidth = tWidth;
-		float tileHeight = tHeight;
+		float tileWidth = TESTMESH.bounds.size.x * 2.8f;
+		float tileHeight = TESTMESH.bounds.size.z * 2.8f;
        	float x = 0;
         float z = 0;
 		float divWidth = (width / 2) * tileWidth;
@@ -237,7 +244,7 @@ public class MazeBuilder : MonoBehaviour
 		minDensity = .25F; //Defines the minimum number of tiles based on the size of the maze
 		maxDensity = .60F;
 		*/
-		
+
 		maze = new List<List<Tile>>();
 		
 		for (int i = 0; i < width; i++) {
@@ -261,7 +268,28 @@ public class MazeBuilder : MonoBehaviour
 		tileList.Add (HNS); //hall running from north to south
 		tileList.Add (HEW);
 
+		lastTile = new List<int>{10,10};
+
 		buildMaze (10, 10, Tile.LOBBY, Dir.N);
+
+		while (numTiles < minTiles || numTiles > maxTiles)
+		{
+			numTiles = 0;
+			maze = new List<List<Tile>>();
+		
+			for (int i = 0; i < width; i++) {
+				maze.Add(new List<Tile>());
+				for (int j = 0; j < height; j++) {
+					maze[i].Add(Tile.WALL);
+				}
+			}
+			buildMaze (10, 10, Tile.LOBBY, Dir.N);
+		}
+
+		print(numTiles);
+
+		maze[lastTile[1]][lastTile[0]] = Tile.LOBBY;
+
 		createMaze();
 
 	}
