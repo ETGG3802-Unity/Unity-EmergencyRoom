@@ -2068,7 +2068,6 @@ Transform:
   - {fileID: 1565600241}
   - {fileID: 1089861679}
   m_Father: {fileID: 0}
-<<<<<<< HEAD
   m_RootOrder: 3
 --- !u!1 &1742990229
 GameObject:
@@ -2097,9 +2096,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 5
-=======
-  m_RootOrder: 2
->>>>>>> cb0656a3ce70595b6e44649ddc56744c36081888
 --- !u!1 &1780181055
 GameObject:
   m_PrefabParentObject: {fileID: 100012, guid: efca1169eb52c4b45a5f9a4535cb62d2, type: 2}
