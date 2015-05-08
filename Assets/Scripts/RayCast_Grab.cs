@@ -53,7 +53,7 @@ public class RayCast_Grab : MonoBehaviour {
 					if (other.GetComponent<Rigidbody> () != null) {
 						other.GetComponent<Rigidbody> ().isKinematic = true;
 						other.transform.parent = gameObject.transform;
-						other.transform.position = Vector3.MoveTowards(other.transform.position, GameObject.Find ("TargetPosition").transform.position, 1.0f);
+						other.transform.position = Vector3.MoveTowards(other.transform.position, GameObject.Find ("TargetPosition").transform.position, 8.0f);
 						other.transform.rotation = moveRotation;
 					} else {
 						print ("No RIGiDBOdY LOL BitCH");

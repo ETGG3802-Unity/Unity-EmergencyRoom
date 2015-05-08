@@ -33,6 +33,10 @@ public class MazeBuilder : MonoBehaviour
 	public float tHeight;
 	public float minDensity;
 	public float maxDensity;
+	float divWidth;
+	float divHeight;
+	public float tileWidth;
+	public float tileHeight;
 	List<List<Tile>> maze;
 	List<Transform> tileList;
 	int numTiles;
@@ -54,6 +58,7 @@ public class MazeBuilder : MonoBehaviour
 	public Transform CSW;
 	public Transform HNS; //hall running from north to south
 	public Transform HEW;
+	public GameObject END;
 
 	List<int> lastTile;
 	
@@ -141,11 +146,11 @@ public class MazeBuilder : MonoBehaviour
 		List<Tile> tiles;
 		Tile tnext = Tile.LOBBY;
 
-		maze[c][r] = tile;
-		numTiles += 1;
-
 		lastTile[0] = c;
 		lastTile[1] = r;
+
+		maze[c][r] = tile;
+		numTiles += 1;
 
 		if (tile == Tile.LOBBY)
 		{	
@@ -164,7 +169,6 @@ public class MazeBuilder : MonoBehaviour
 					break;
 				}
 			}
-
 			return;
 		}
 
@@ -210,19 +214,17 @@ public class MazeBuilder : MonoBehaviour
 			//print(tnext + ", " + ndir + ", (" + next[0] + "," + next[1] + ")\n");
 			buildMaze(next[0], next[1], tnext, ndir);
 		}
-
+	
 		return;
 	}
 
 	public void createMaze()
 	{
-		float tileWidth = TESTMESH.bounds.size.x * 2.8f;
-		float tileHeight = TESTMESH.bounds.size.z * 2.8f;
+
        	float x = 0;
         float z = 0;
-		float divWidth = (width / 2) * tileWidth;
-		float divHeight = (height / 2) * -tileHeight;
         Tile tile;
+
 
 		for (int i = 0; i < width; i++) {
 			maze.Add(new List<Tile>());
@@ -230,7 +232,6 @@ public class MazeBuilder : MonoBehaviour
 				tile = maze[i][j];
 				Transform pref = tileList[(int)tile];
 				x = ((i * tileWidth) - divWidth);
-				print (x);
 				z = ((j * -tileHeight) - divHeight); //Required for the way Unity reads coordinates
 				Instantiate(pref, new Vector3(x, 0, z), Quaternion.identity);
 			}
@@ -244,6 +245,10 @@ public class MazeBuilder : MonoBehaviour
 		minDensity = .25F; //Defines the minimum number of tiles based on the size of the maze
 		maxDensity = .60F;
 		*/
+		//tileWidth = TESTMESH.bounds.size.x * 2.8f;
+		//tileHeight = TESTMESH.bounds.size.z * 2.8f;
+		divWidth = (width / 2) * tileWidth;
+		divHeight = (height / 2) * -tileHeight;
 
 		maze = new List<List<Tile>>();
 		
@@ -255,8 +260,10 @@ public class MazeBuilder : MonoBehaviour
 		}
 		
 		int area = width * height;
-		int minTiles = (int)(minDensity * area);
-		int maxTiles = (int)(maxDensity * area);
+		//int minTiles = (int)(minDensity * area);
+		//int maxTiles = (int)(maxDensity * area);
+		int minTiles = 5;
+		int maxTiles = 7;
 		
 		tileList = new List<Transform>();
 		tileList.Add (WALL);
@@ -268,13 +275,16 @@ public class MazeBuilder : MonoBehaviour
 		tileList.Add (HNS); //hall running from north to south
 		tileList.Add (HEW);
 
-		lastTile = new List<int>{10,10};
+		lastTile = new List<int>{0,0};
 
 		buildMaze (10, 10, Tile.LOBBY, Dir.N);
 
-		while (numTiles < minTiles || numTiles > maxTiles)
+		while (true)
 		{
-			numTiles = 0;
+			if (numTiles > minTiles && numTiles < maxTiles)
+				break;
+
+			print ("okay!");
 			maze = new List<List<Tile>>();
 		
 			for (int i = 0; i < width; i++) {
@@ -283,12 +293,15 @@ public class MazeBuilder : MonoBehaviour
 					maze[i].Add(Tile.WALL);
 				}
 			}
+			numTiles = 0;
 			buildMaze (10, 10, Tile.LOBBY, Dir.N);
+
 		}
 
-		print(numTiles);
-
-		maze[lastTile[1]][lastTile[0]] = Tile.LOBBY;
+		float lastx = (lastTile [0] * tileWidth) - divWidth;
+		float lastz = (lastTile [1] * -tileHeight) - divHeight;
+		Instantiate(END, new Vector3(lastx, 0, lastz), Quaternion.identity);
+		//maze [lastTile [0]] [lastTile [1]] ;
 
 		createMaze();
 

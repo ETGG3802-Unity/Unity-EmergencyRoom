@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Grabbable
   - CarController
+  - FPSController
   layers:
   - Default
   - TransparentFX
@@ -15,7 +16,7 @@ TagManager:
   - UI
   - 
   - 
-  - 
+  - miniMap
   - 
   - 
   - 

@@ -34,7 +34,7 @@ public class SimpleCarController : MonoBehaviour {
 
 	public void Update()
 	{
-		if (Input.GetKey (KeyCode.P)) {
+		if (Input.GetKey (KeyCode.E)) {
 			fpControl.enabled = true;
 			GameObject.Find ("FPSController").transform.position = gameObject.transform.position;
 			fpCam.enabled = true;
